@@ -7,9 +7,27 @@ jobs:
   test-ubuntu-latest:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+
+    - name: cache coderrect
+      id: cache-coderrect
+      uses: actions/cache@v2
+      with:
+        path: coderrect-linux-0.5.x
+        key: ${{ runner.os }}-coderrect
+
+    - name: setup coderrect
+      if: steps.cache-coderrect.outputs.cache-hit != 'true'
+      run: |
+        wget https://race.coderrect.com/t/coderrect-linux-0.5.x.tar.gz
+        tar xvfz coderrect-linux-0.5.x.tar.gz
+
     - name: make
-      run: make
+      run: |
+        export CODERRECT_HOME=$PWD/coderrect-linux-0.5.x 
+        export PATH=$CODERRECT_HOME/bin:$PATH
+        coderrect -e redis-server make
+    
     - name: test
       run: |
         sudo apt-get install tcl8.5
