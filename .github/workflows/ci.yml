@@ -25,7 +25,7 @@ jobs:
     - name: make
       run: |
         export PATH=$PWD/coderrect-linux-0.5.x/bin:$PATH
-        coderrect -t -e redis-server make
+        coderrect -t -e src/redis-server,src/redis-benchmark make
     
     - name: test
       run: |
