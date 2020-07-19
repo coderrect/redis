@@ -17,7 +17,7 @@ jobs:
         key: ${{ runner.os }}-coderrect
 
     - name: setup coderrect
-      # if: steps.cache-coderrect.outputs.cache-hit != 'true'
+      if: steps.cache-coderrect.outputs.cache-hit != 'true'
       run: |
         wget https://race.coderrect.com/t/coderrect-linux-0.5.x.tar.gz
         tar xvfz coderrect-linux-0.5.x.tar.gz
@@ -25,7 +25,7 @@ jobs:
     - name: make
       run: |
         export PATH=$PWD/coderrect-linux-0.5.x/bin:$PATH
-        coderrect -t -all make
+        coderrect -t -e redis-server make
     
     - name: test
       run: |
