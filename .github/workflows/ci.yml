@@ -17,16 +17,15 @@ jobs:
         key: ${{ runner.os }}-coderrect
 
     - name: setup coderrect
-      if: steps.cache-coderrect.outputs.cache-hit != 'true'
+      # if: steps.cache-coderrect.outputs.cache-hit != 'true'
       run: |
         wget https://race.coderrect.com/t/coderrect-linux-0.5.x.tar.gz
         tar xvfz coderrect-linux-0.5.x.tar.gz
 
     - name: make
       run: |
-        export CODERRECT_HOME=$PWD/coderrect-linux-0.5.x 
-        export PATH=$CODERRECT_HOME/bin:$PATH
-        coderrect -e redis-server make
+        export PATH=$PWD/coderrect-linux-0.5.x/bin:$PATH
+        coderrect -t -all make
     
     - name: test
       run: |
@@ -34,34 +33,4 @@ jobs:
         ./runtest --verbose
     - name: module api test
       run: ./runtest-moduleapi --verbose
-
-  build-ubuntu-old:
-    runs-on: ubuntu-16.04
-    steps:
-    - uses: actions/checkout@v1
-    - name: make
-      run: make
-
-  build-macos-latest:
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v1
-    - name: make
-      run: make
-
-  biuld-32bit:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - name: make
-      run: |
-        sudo apt-get update && sudo apt-get install libc6-dev-i386
-        make 32bit
-
-  build-libc-malloc:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - name: make
-      run: make MALLOC=libc
 
