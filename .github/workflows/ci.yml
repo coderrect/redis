@@ -13,19 +13,19 @@ jobs:
       id: cache-coderrect
       uses: actions/cache@v2
       with:
-        path: coderrect-linux-0.5.x
+        path: coderrect-linux-0.6.0
         key: ${{ runner.os }}-coderrect
 
     - name: setup coderrect
       if: steps.cache-coderrect.outputs.cache-hit != 'true'
       run: |
-        wget https://race.coderrect.com/t/coderrect-linux-0.5.x.tar.gz
-        tar xvfz coderrect-linux-0.5.x.tar.gz
+        wget https://public-installer-pkg.s3.us-east-2.amazonaws.com/coderrect-linux-0.6.0.tar.gz
+        tar xfz coderrect-linux-0.6.0.tar.gz
 
     - name: make
       run: |
-        export PATH=$PWD/coderrect-linux-0.5.x/bin:$PATH
-        coderrect -t -e src/redis-server,src/redis-benchmark make
+        export PATH=$PWD/coderrect-linux-0.6.0/bin:$PATH
+        coderrect -t -all make
     
     - name: test
       run: |
