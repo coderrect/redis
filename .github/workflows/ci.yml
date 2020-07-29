@@ -21,12 +21,15 @@ jobs:
       run: |
         wget https://public-installer-pkg.s3.us-east-2.amazonaws.com/coderrect-linux-0.6.0.tar.gz
         tar xfz coderrect-linux-0.6.0.tar.gz
+        echo "::add-path::$PWD/coderrect-linux-0.6.0/bin"
+
 
     - name: make
-      run: |
-        export PATH=$PWD/coderrect-linux-0.6.0/bin:$PATH
-        coderrect -t -e redis-server make
-    
+      run: coderrect -analyzeAllBinaries make
+
+    - name: coderrect check
+      run: coderrect -publishResults
+        
     - name: test
       run: |
         sudo apt-get install tcl8.5
