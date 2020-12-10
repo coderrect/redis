@@ -13,15 +13,15 @@ jobs:
       id: cache-coderrect
       uses: actions/cache@v2
       with:
-        path: coderrect-linux-0.6.0
+        path: coderrect-linux-develop
         key: ${{ runner.os }}-coderrect
 
     - name: setup coderrect
       if: steps.cache-coderrect.outputs.cache-hit != 'true'
       run: |
-        wget https://public-installer-pkg.s3.us-east-2.amazonaws.com/coderrect-linux-0.6.0.tar.gz
-        tar xfz coderrect-linux-0.6.0.tar.gz
-        echo "::add-path::$PWD/coderrect-linux-0.6.0/bin"
+        wget https://public-installer-pkg.s3.us-east-2.amazonaws.com/coderrect-linux-develop.tar.gz
+        tar xfz coderrect-linux-develop.tar.gz
+        echo "$PWD/coderrect-linux-develop/bin" >> $GITHUB_PATH
 
 
     - name: make
